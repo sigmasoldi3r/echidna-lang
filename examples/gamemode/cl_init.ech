@@ -1,0 +1,35 @@
+"shared.lua" |> include
+
+def advent() {
+  print("Throwing error...")
+  throw "Not a good error, maybe"
+}
+
+try {
+  advent()
+} catch err {
+  print("Of ascension $err")
+}
+
+trying advent catch err {
+  print("Why the lambda? $err")
+}
+
+def Try(at) {
+  try {
+    return new {
+      value: at(),
+      success: true
+    }
+  } catch err {
+    return new {
+      error: err,
+      success: false
+    }
+  }
+}
+
+let result = Try {
+  print("Something that might fail!")
+  throw "Indeed, fail did I."
+}

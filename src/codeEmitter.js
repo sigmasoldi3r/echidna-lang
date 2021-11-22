@@ -542,26 +542,35 @@ class Context {
     this.writeln(`end\n`);
   };
   tryStatement = (node) => {
+    this.writeln(`do\n`);
+    const ctx = this.push(ContextType.CLOSURE, 1);
     let err = `__err__`;
     if (node.catchBody != null) {
-      err = this.compile(node.catchBody.target);
+      err = ctx.compile(node.catchBody.target);
     }
-    this.writeln(`local __result__, ${err} = pcall(function()\n`);
-    const tryCtx = this.push(ContextType.CLOSURE, 1);
-    tryCtx.compile(node.body, true);
-    this.writeln(`end)\n`);
+    const tryCtx = ctx.push(ContextType.CLOSURE, 1);
+    if (node.body.tag === "script") {
+      ctx.writeln(`local __result__, ${err} = pcall(function()\n`);
+      tryCtx.compile(node.body, true);
+      ctx.writeln(`end)\n`);
+    } else {
+      ctx.writeln(`local __result__, ${err} = pcall(`);
+      tryCtx.compile(node.body, true);
+      ctx.write(`)\n`);
+    }
     if (node.catchBody != null) {
-      this.writeln(`if ${err} ~= nil then\n`);
-      const catchCtx = this.push(ContextType.CLOSURE, 1);
+      ctx.writeln(`if ${err} ~= nil then\n`);
+      const catchCtx = ctx.push(ContextType.CLOSURE, 1);
       catchCtx.compile(node.catchBody.body, true);
-      this.writeln(`end\n`);
+      ctx.writeln(`end\n`);
     }
     if (node.finallyBody != null) {
-      this.writeln(`do\n`);
-      const finallyCtx = this.push(ContextType.CLOSURE, 1);
+      ctx.writeln(`do\n`);
+      const finallyCtx = ctx.push(ContextType.CLOSURE, 1);
       finallyCtx.compile(node.finallyBody, true);
-      this.writeln(`end\n`);
+      ctx.writeln(`end\n`);
     }
+    this.writeln(`end\n`);
   };
   notImplementedExpression = (node) => {
     this.write(`error('Not implemented')`);

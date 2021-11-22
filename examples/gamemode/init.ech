@@ -1,0 +1,41 @@
+"cl_init.lua" |> AddCSLuaFile
+"shared.lua" |> AddCSLuaFile
+-- ".lua" |> AddCSLuaFile
+
+def extend[GM] PlayerSpawn(ply) {
+  self.BaseClass:PlayerSpawn(ply)   
+  ply:SetGravity(0.75)
+  ply:SetMaxHealth(100, true)  
+  ply:SetWalkSpeed(325)  
+  ply:SetRunSpeed (325)
+}
+
+def extend[GM] PlayerLoadout(ply) {
+  print("Player")
+  if (ply:Team() == 1) {
+    print("Player is on team 1")
+  }
+}
+
+export def Hook(kind, name)(target, method) {
+  let fn = target[method]
+  hook.Add(kind, name) { => fn(target) }
+}
+
+export class MyMod {
+  let times = 0
+  @Hook("OnPlayerHitGround", "myHitCounter")
+  def draw() {
+    print("Player hits the ground ${self.times += 1} time/s")
+  }
+}
+
+export def whomst() {
+  for (let i = 0; i < 10; i += 1) {
+    print("i = $i")
+  }
+  while (true) {
+    print("Forever!")
+    return false
+  }
+}

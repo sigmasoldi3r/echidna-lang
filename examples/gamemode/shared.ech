@@ -1,0 +1,9 @@
+--[[
+  Shared gamemode file
+]]
+GM.Name = "SimpleBuild"
+GM.Author = "sigmasoldi3r"
+GM.Email = "pablobc.1995@gmail.com"
+GM.Website = "a"
+
+"sandbox" |> DeriveGamemode

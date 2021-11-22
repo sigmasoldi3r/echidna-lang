@@ -3,4 +3,4 @@
 
 # Ignore output
 /dist/
-/examples/out/
+/examples/**/*.lua

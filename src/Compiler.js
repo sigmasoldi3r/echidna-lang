@@ -1,4 +1,4 @@
-const { Context } = require("./Context");
+const { Context } = require("./codeEmitter");
 const { CodeSyntaxError: SyntaxError } = require("./exceptions");
 const grammar = require("./grammar");
 
