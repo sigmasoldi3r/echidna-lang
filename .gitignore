@@ -1,0 +1,6 @@
+# Ignore dependencies
+/node_modules/
+
+# Ignore output
+/dist/
+/examples/out/

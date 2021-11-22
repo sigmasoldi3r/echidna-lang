@@ -1,0 +1,115 @@
+let a = 5
+let s = a += 1
+print("s = $s")
+
+-- As statements
+s += 1
+
+-- Practical example of class:
+class X(let o = 0) {
+  def moo() {
+    print("Yabai{${self.o}}")
+  }
+  def __add(other) {
+    export let secret = other.o
+    return new self(self.o + other.o)
+  }
+  def __sub(o) = new self(self.o - o.o)
+}
+let x = new X(10)
+let y = new X(20)
+let z = x + y
+print("z = ${z.o}")
+z:moo()
+
+export class Y(let o): X
+
+-- Example of advanced operators
+let div = 10 // 3 + 1
+
+export def test() {
+  print("Test function! 10 // 3 + 1 = $div")
+}
+
+--[[
+  Test class expressions
+]]
+let Bt = class Beta {
+  def gas(hold) {
+    print("Gas $hold")
+  }
+}
+
+let b = new Bt()
+b:gas("gas")
+
+-- Example of extension
+def extend[string] split(by) {
+  return "no"
+}
+
+def greeter(who)() {
+  print("Hello $who!")
+}
+
+let greet = greeter("Foo")
+greet()
+
+-- String interpolation
+let hee = "hee"
+let yes = 5
+let ho = "hee $hee ${yes + 1 .. "kool"}"
+
+-- Examples of lambda functions
+export let implicit = { it // 2 }
+let lmbd = { x => return x - 1 }
+let lmbd2 = x => x + 1
+let lmbd3 = (x, y) => x + y
+export let lmbd4 = x => y => x + y -- Curried
+
+def caller(fn) = fn("hello")
+def wArgs(what, fn) = fn(what)
+
+-- Postfix lambda call notation
+caller {
+  print("argument = $it")
+}
+
+wArgs("World") {
+  print("Hello $it!")
+}
+
+class Test(let desc) {
+  def toBe(what) {
+    print("  > ${self.desc} [RESULT: $what]")
+  }
+}
+
+def test(describe, run) {
+  print("> $describe")
+  run { desc, runner =>
+    runner(new Test(desc))
+  }
+}
+
+test("My pants") {
+  it("Should show my ass") { expect =>
+    expect:toBe(true)
+  }
+}
+
+MyModule = new (class MyModule {
+  def gole() = print(":8")
+})()
+
+let aThing = "magic"
+
+def run(runner)(what) = runner(what)
+
+aThing |> run {
+  print("oh $it is!")
+}
+
+def fun(a) = "fun = ${a + 1}"
+
+1 |> fun |> print

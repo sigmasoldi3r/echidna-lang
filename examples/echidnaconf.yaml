@@ -1,0 +1,8 @@
+# Echidna project build info
+
+files:
+  - gamemode/cl_init.ech
+  - gamemode/init.ech
+  - gamemode/shared.ech
+
+outDir: out

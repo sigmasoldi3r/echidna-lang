@@ -1,0 +1,34 @@
+{
+  "name": "echidna-lang",
+  "version": "1.0.0",
+  "author": "sigmasoldi3r",
+  "icon": "echidna.png",
+  "description": "A simple language that brings syntactic modernity to Lua environments, without sacrificing speed.",
+  "main": "src/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "cli-progress": "^3.9.1",
+    "commander": "^8.3.0",
+    "mkdirp": "^1.0.4",
+    "nexe": "^4.0.0-beta.19",
+    "yaml": "^1.10.2"
+  },
+  "bin": "src/index.js",
+  "pkg": {
+    "scripts": "src/**/*.js",
+    "outputPath": "dist",
+    "compress": "GZip"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "build": "peggy --cache -o src/grammar.js echidna.peggy",
+    "bundle": "rollup src/index.js --file dist/bundle.js --format umd --name \"echidna\"",
+    "dist": "node build.js"
+  },
+  "devDependencies": {
+    "peggy": "^1.2.0",
+    "pkg": "^5.4.1",
+    "rcedit": "^3.0.1"
+  }
+}

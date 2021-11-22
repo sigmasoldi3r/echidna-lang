@@ -1,0 +1,8 @@
+
+def some(curried)(args, ...) {
+  return curried(args, ...)
+}
+
+let c = some { a, b => print("a = $a, b = $b") }
+
+let [a, b, c] = [1, 2, 3]

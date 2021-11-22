@@ -1,0 +1,18 @@
+def Decorate(message)(target) {
+  println("Decorating $message: ${target.name}...")
+}
+
+def M(name, parent, args, meta) {
+  println("Decorating method $name from ${parent.name} with ${#args} arguments...")
+}
+
+def P(position, name, host, parent) {
+  println("Decorating param $position '$name' from method $host at class ${parent.name}...")
+}
+
+@Decorate("this class")
+class Beta {
+  @M def gas(@P hold) {
+    println("Gas $hold")
+  }
+}
