@@ -74,12 +74,8 @@ variableStatement
   init:(_ EQ _ @expression)?
   { return L('let', {mut, init, name}) }
 
-tryBlock
-  = TRYING _ @expression
-  / TRY _ @codeBlock
-
 tryStatement
-  = body:tryBlock
+  = TRY _ body:expression
   catchBody:(_ CATCH __ t:name _ b:codeBlock { return {target: t, body: b} })?
   finallyBody:(_ FINALLY _ @codeBlock)?
   { return L('tryStatement', { body, catchBody, finallyBody }) }

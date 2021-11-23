@@ -22,7 +22,8 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "build": "peggy --cache -o src/grammar.js echidna.peggy",
+    "build": "peggy --trace --cache -o src/grammar.js echidna.peggy",
+    "peg": "peggy",
     "bundle": "rollup src/index.js --file dist/bundle.js --format umd --name \"echidna\"",
     "dist": "node build.js"
   },

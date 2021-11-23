@@ -11,7 +11,7 @@ try {
   print("Of ascension $err")
 }
 
-trying advent catch err {
+try advent catch err {
   print("Why the lambda? $err")
 }
 
