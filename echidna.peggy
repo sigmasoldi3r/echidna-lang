@@ -147,12 +147,12 @@ unaryExpression
   / pipeExpression
 
 pipeExpression
-  = left:callExpression _ op:PIPELINE_OPERATORS _ right:pipeExpression
+  = left:accessExpression _ op:PIPELINE_OPERATORS _ right:pipeExpression
   { return L('pipe', {left, op, right}) }
-  / callExpression
+  / accessExpression
 
 callExpression
-  = target:accessExpression
+  = target:term
   args:(_ '(' @expressionList? _ ')')
   last:(_ @bracketedLambdaExpression)?
   {
@@ -161,10 +161,10 @@ callExpression
     }
     return L('call', {args, target})
   }
-  / target:accessExpression
+  / target:term
   last:(_ @bracketedLambdaExpression)
   { return L('call', {args: [last], target}) }
-  / accessExpression
+  / term
 
 accessExpression
   = left:arrayAccessExpression _ op:(':'/'.') _ right:accessExpression
@@ -172,9 +172,9 @@ accessExpression
   / arrayAccessExpression
 
 arrayAccessExpression
-  = head:term _ '[' _ term:expression _ ']'
+  = head:callExpression _ '[' _ term:expression _ ']'
   { return L('arrayAccess', {head, term}) }
-  / term
+  / callExpression
 
 objectExpression
   = NEW _ '{' pairs:pairs _ '}'
@@ -198,7 +198,7 @@ term
   / stringLiteral
   / classExpression
   / name
-  / '(' _ @expression _ ')'
+  / '(' _ expr:expression _ ')' { return L('expressionBraces', {expr}) }
 
 // EXPRESSION TYPES & literals //
 nameList
@@ -250,7 +250,7 @@ throwExpression
   { return L('throw', {expr}) }
 
 unescapedText
-  = value:$(![\"$] .)+
+  = value:$('\\"' / (![\"$] .))+
   { return L('text', {value}) }
 
 interpolated
@@ -293,7 +293,6 @@ argumentList
     { return [head, ...tail] }
   )?
   { return terms ?? [] }
-
 
 objectKey
   = name

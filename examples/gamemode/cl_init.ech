@@ -33,3 +33,4 @@ let result = Try {
   print("Something that might fail!")
   throw "Indeed, fail did I."
 }
+assert(result.success == false)

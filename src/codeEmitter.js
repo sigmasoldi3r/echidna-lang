@@ -1,5 +1,5 @@
 const Printer = require("./Printer");
-const { CodeSyntaxError: SyntaxError, CodeError } = require("./exceptions");
+const { CodeSyntaxError, CodeError, CompilerError } = require("./exceptions");
 
 const EXPORT_VAR = `__exported__`;
 
@@ -68,7 +68,7 @@ class Context {
   };
   let = (node) => {
     if (node.name.tag !== "name" && node.init == null) {
-      throw new SyntaxError(
+      throw new CodeSyntaxError(
         `Cannot destructure values from non-assigning declaration!`,
         node.name
       );
@@ -356,7 +356,7 @@ class Context {
         break;
       case "new":
         if (expr.tag !== "call") {
-          throw new SyntaxError(
+          throw new CodeSyntaxError(
             "new expression must be preceding a call signature!",
             node
           );
@@ -508,7 +508,10 @@ class Context {
   decoratedStatement = (node) => {
     const name = node.statement.name ?? node.statement.statement?.def?.name;
     if (name == null) {
-      throw new SyntaxError(`Not a valid decorator target!`, node.statement);
+      throw new CodeSyntaxError(
+        `Not a valid decorator target!`,
+        node.statement
+      );
     }
     this.compile(node.statement, true);
     for (const decorator of node.decorators) {
@@ -615,6 +618,11 @@ class Context {
     }
     ctx.writeln(`end\n`);
     this.writeln(`end\n`);
+  };
+  expressionBraces = (node) => {
+    this.write("(");
+    this.compile(node.expr, true);
+    this.write(")");
   };
   compile = (node, force = false) => {
     try {
