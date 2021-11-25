@@ -1,0 +1,32 @@
+--[[
+  Examples of wide range application of null-coalescing
+  operator family.
+]]
+
+-- Example of coalescence for binary operators:
+let b = nil
+let a = 1
+
+-- Typical unguarded code
+try {
+  let result = a + b
+} catch err {
+  print("Error: $err")
+}
+
+-- Safe elvis code:
+let result = a ?+ b
+print("Result = $result, ${a} no worries.")
+
+-- Coalescing with default values is also possible:
+let r = a ?:+ b
+print("r = $r, b is nil and gets discarded.")
+
+-- Null safe function call
+let maybePrint = nil
+
+maybePrint?("Hello!")
+
+maybePrint = print
+
+maybePrint?("Hello again!")

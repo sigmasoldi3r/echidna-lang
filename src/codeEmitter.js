@@ -63,6 +63,11 @@ class Context {
   // Compiler functions //
   script = ({ statements }) => {
     for (const statement of statements) {
+      if (statement.tag === "expressionStatement") {
+        if (statement.expr.tag === "call" && statement.expr.elvis != null) {
+          this.write(`_ = `);
+        }
+      }
       this.compile(statement, true);
     }
   };
@@ -232,6 +237,13 @@ class Context {
   };
   binary = (node) => {
     const { left, op, right } = node;
+    if (node.elvis === "?") {
+      this.write(`(`);
+      this.compile(left, true);
+      this.write(` ~= nil and `);
+      this.compile(right, true);
+      this.write(` ~= nil) and `);
+    }
     switch (op) {
       case "==":
       case "~=":
@@ -447,6 +459,10 @@ class Context {
     this.writeln(`end`);
   };
   call = (node) => {
+    if (node.elvis === "?") {
+      this.compile(node.target, true);
+      this.write(` ~= nil and `);
+    }
     this.compile(node.target, true);
     this.write(`(`);
     if (node.args?.length > 0) {

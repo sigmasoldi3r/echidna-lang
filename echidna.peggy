@@ -112,58 +112,60 @@ expression "Expression"
   / assignExpression
 
 assignExpression
-  = left:additiveExpression _ op:ASSIGN_OPERATOR? EQ _ right:additiveExpression
-  { return L('assign', {left, op, right}) }
+  = left:additiveExpression _ elvis:elvis? op:ASSIGN_OPERATOR? EQ _ right:additiveExpression
+  { return L('assign', {left, op, elvis, right}) }
   / additiveExpression
 
 additiveExpression
-  = left:productExpression _ op:ADDITIVE_OPERATOR _ right:additiveExpression
-  { return L('binary', {left, op, right}) }
+  = left:productExpression _ elvis:elvis? op:ADDITIVE_OPERATOR _ right:additiveExpression
+  { return L('binary', {left, op, elvis, right}) }
   / productExpression
 
 productExpression
-  = left:comparisonExpression _ op:PRODUCT_OPERATOR _ right:productExpression
-  { return L('binary', {left, op, right}) }
+  = left:comparisonExpression _ elvis:elvis? op:PRODUCT_OPERATOR _ right:productExpression
+  { return L('binary', {left, op, elvis, right}) }
   / comparisonExpression
 
 comparisonExpression
-  = left:logicExpression _ op:COMPARISON_OPERATOR _ right:comparisonExpression
-  { return L('binary', {left, op, right}) }
+  = left:logicExpression _ elvis:elvis? op:COMPARISON_OPERATOR _ right:comparisonExpression
+  { return L('binary', {left, op, elvis, right}) }
   / logicExpression
 
 logicExpression
-  = left:specialExpression _ op:LOGIC_OPERATOR _ right:logicExpression
-  { return L('binary', {left, op, right}) }
+  = left:specialExpression _ elvis:elvis? op:LOGIC_OPERATOR _ right:logicExpression
+  { return L('binary', {left, op, elvis, right}) }
   / specialExpression
 
 specialExpression
-  = left:unaryExpression _ op:SPECIAL_OPERATOR _ right:specialExpression
-  { return L('binary', {left, op, right}) }
+  = left:unaryExpression _ elvis:elvis? op:SPECIAL_OPERATOR _ right:specialExpression
+  { return L('binary', {left, op, elvis, right}) }
   / unaryExpression
 
 unaryExpression
-  = op:UNARY_OPERATOR _ expr:unaryExpression
-  { return L('unary', {op, expr}) }
+  = op:UNARY_OPERATOR _ elvis:elvis? expr:unaryExpression
+  { return L('unary', {op, elvis, expr}) }
   / pipeExpression
 
 pipeExpression
-  = left:accessExpression _ op:PIPELINE_OPERATORS _ right:pipeExpression
-  { return L('pipe', {left, op, right}) }
+  = left:accessExpression _ elvis:elvis? op:PIPELINE_OPERATORS _ right:pipeExpression
+  { return L('pipe', {left, op, elvis, right}) }
   / accessExpression
 
 callExpression
   = target:term
+  elvis:(_ @elvis)?
   args:(_ '(' @expressionList? _ ')')
   last:(_ @bracketedLambdaExpression)?
   {
     if (last != null) {
       args.push(last)
     }
-    return L('call', {args, target})
+    return L('call', {args, elvis, target})
   }
   / target:term
+  elvis:(_ @elvis)?
   last:(_ @bracketedLambdaExpression)
-  { return L('call', {args: [last], target}) }
+  { return L('call', {args: [last], elvis, target}) }
   / term
 
 accessExpression
@@ -323,6 +325,8 @@ classBody
   expr:(_ @classField)* _
   '}'
   { return expr ?? [] }
+
+elvis = ('?:' / '??' / '?')
 
 // KEYWORDS //
 LET = 'let'
