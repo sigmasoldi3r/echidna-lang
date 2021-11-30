@@ -16,7 +16,7 @@ try {
 
 -- Safe elvis code:
 let result = a ?+ b
-print("Result = $result, ${a} no worries.")
+print("Result = $result, no worries.")
 
 -- Coalescing with default values is also possible:
 let r = a ?:+ b

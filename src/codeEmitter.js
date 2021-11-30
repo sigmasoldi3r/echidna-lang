@@ -180,21 +180,33 @@ class Context {
     }
     this.write(`_`);
     this.write(`)\n`);
-    this.writeln(`local new = setmetatable({}, class);\n`, 2);
+    this.writeln(`local self = setmetatable({}, class);\n`, 2);
     for (const param of node.primary ?? []) {
       if (param.field) {
         const name = this.compile(param.name);
-        this.writeln(`new.${name} = ${name};\n`, 2);
+        this.writeln(`self.${name} = ${name};\n`, 2);
         if (param.init != null) {
           this.writeln(`if ${name} == nil then\n`, 2);
-          this.writeln(`new.${name} = `, 3);
+          this.writeln(`self.${name} = `, 3);
           this.compile(param.init, true);
           this.write(`;\n`);
           this.writeln(`end\n`, 2);
         }
       }
     }
-    this.writeln(`return new;\n`, 2);
+    const newCtx = this.push(ContextType.CLOSURE, 2);
+    for (const field of node.body ?? []) {
+      if (field.tag === "let") {
+        newCtx.writeln(`self.`);
+        newCtx.compile(field.name, true);
+        if (field.init != null) {
+          newCtx.write(` = `);
+          newCtx.compile(field.init, true);
+        }
+        newCtx.write(`;\n`);
+      }
+    }
+    this.writeln(`return self;\n`, 2);
     this.writeln(`end\n`, 1);
     for (const field of node.body ?? []) {
       const name = this.compile(field.name ?? field.statement?.name);
@@ -209,14 +221,6 @@ class Context {
           this.write(name);
           this.write(`");\n`);
         }
-      } else if (field.tag === "let") {
-        this.writeln(`class.`, 1);
-        this.compile(field.name, true);
-        if (field.init != null) {
-          this.write(` = `);
-          this.compile(field.init, true);
-        }
-        this.write(`;\n`);
       }
     }
     this.writeln(`return class\n`, 1);
@@ -306,6 +310,14 @@ class Context {
     this.#compileLinear(pipeData);
   };
   #compileAssignPart(local, left, op, right) {
+    if (op === "::") {
+      local.compile(left, true);
+      local.write(`[#`);
+      local.compile(left, true);
+      local.write(` + 1] = `);
+      local.compile(right, true);
+      return;
+    }
     local.compile(left, true);
     local.write(` = `);
     switch (op) {
@@ -357,6 +369,10 @@ class Context {
   unary = (node) => {
     const { op, expr } = node;
     switch (op) {
+      case "#":
+        this.write(op);
+        this.compile(expr, true);
+        break;
       case "not":
         this.write(`${op} `);
         this.compile(expr, true);
@@ -390,7 +406,7 @@ class Context {
   };
   expressionStatement = (node) => {
     if (node.expr.tag === "assign") {
-      const { left, op, right } = node.expr;
+      const { left, right, op } = node.expr;
       this.writeln(``);
       this.#compileAssignPart(this, left, op, right);
       this.write(`;\n`);
@@ -402,6 +418,10 @@ class Context {
   };
   number = (node) => node.value;
   string = (node) => {
+    if (node.segments.length === 0) {
+      this.write('""');
+      return;
+    }
     if (node.segments.length === 1) {
       this.compile(node.segments[0], true);
       return;
@@ -417,11 +437,13 @@ class Context {
       this.write(` .. `);
     }
     const segment = node.segments[node.segments.length - 1];
-    if (segment.tag !== "text") {
+    if (segment?.tag !== "text") {
       this.write(`tostring(`);
     }
-    this.compile(segment, true);
-    if (segment.tag !== "text") {
+    if (segment != null) {
+      this.compile(segment, true);
+    }
+    if (segment?.tag !== "text") {
       this.write(`)`);
     }
   };

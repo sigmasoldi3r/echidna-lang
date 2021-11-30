@@ -1,5 +1,6 @@
 def Decorate(message)(target) {
-  println("Decorating $message: ${target.name}...")
+  let { name } = target
+  println("Decorating $message: $name...")
 }
 
 def M(name, parent, args, meta) {
@@ -12,6 +13,7 @@ def P(position, name, host, parent) {
 
 @Decorate("this class")
 class Beta {
+  -- WARNING: Parameter decorators are not ready yet.
   @M def gas(@P hold) {
     println("Gas $hold")
   }

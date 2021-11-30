@@ -1,6 +1,6 @@
 const fs = require("fs");
 const chalk = require("chalk");
-const { CodeError } = require("./exceptions");
+const { CodeError, InternalError } = require("./exceptions");
 
 /** @param {string} src */
 const source = (source) => {
@@ -22,10 +22,13 @@ ${chalk.blue(source)}:${chalk.yellow(start.line)}:${chalk.yellow(
 
 ${chalk.black.bgWhite(lineText)} ${line}
 ${chalk.bgWhite(" ".repeat(lineText.length))} ${" ".repeat(
-              start.column - 1
-            )}${chalk.red("^".repeat(end.column - start.column))}`
+              Math.max(start.column - 1, 0)
+            )}${chalk.red("^".repeat(Math.max(end.column - start.column, 0)))}`
           );
-          return err;
+          if (err instanceof InternalError) {
+            console.error(chalk`\n{red Trace:\n ${err.stack}}`);
+          }
+          throw err;
         } else {
           console.error(chalk`{red Unable to map the error}`);
           throw err;

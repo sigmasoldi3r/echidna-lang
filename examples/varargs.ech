@@ -1,8 +1,16 @@
-
+--[[
+  WARNING
+  This is not the final version, this is a work in progress.
+  Final stages pretend to have a javascript-like syntax for varargs.
+]]
 def some(curried)(args, ...) {
   return curried(args, ...)
 }
 
 let c = some { a, b => print("a = $a, b = $b") }
 
+--[[
+  REMARK
+  Array destructure is not ready yet.
+]]
 let [a, b, c] = [1, 2, 3]

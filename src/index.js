@@ -123,6 +123,6 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error(chalk`{red ${err}}`);
+  console.error(chalk`{red ${err.stack ?? err}}`);
   process.exit(err.code ?? -1);
 });
