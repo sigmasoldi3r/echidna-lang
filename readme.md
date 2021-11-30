@@ -1,4 +1,4 @@
-# Echidna Lang
+# ![Echidna Logo](echidna.png) Echidna Lang
 
 A flexible programming language for the 21st century, targetting the Lua virtual
 machine.
