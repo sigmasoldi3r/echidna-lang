@@ -76,6 +76,11 @@ let lmbd3 = (x, y) => x + y
 export let lmbd4 = x => y => x + y -- Curried
 ```
 
+**Note:** The block syntax will define one parameter called `it`, if no
+parameters are specified (Eg: `{}`). If what you want is a true 0-arity
+function, you must write `{=>}`, otherwise you'll have an equivalent to
+`(it) => {}` in javascript.
+
 The latter brings us a speciall syntax for calls, where lambdas can be passed
 as the last item in the call.
 
