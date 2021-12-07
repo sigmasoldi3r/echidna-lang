@@ -7,6 +7,7 @@ const chalk = require("chalk");
 const path = require("path");
 const mkdirp = require("mkdirp");
 const cliProgress = require("cli-progress");
+const { CompilerError } = require("./exceptions");
 
 const CWD = process.cwd();
 
@@ -123,6 +124,8 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error(chalk`{red ${err.stack ?? err}}`);
+  if (!(err instanceof CompilerError)) {
+    console.error(chalk`{red ${err.stack ?? err}}`);
+  }
   process.exit(err.code ?? -1);
 });

@@ -1,0 +1,28 @@
+--[[
+  Functional tests, echidna.
+]]
+let { using, map, join } = require("lib/std")
+
+-- Example of hybrid syntax, combining both block syntax and arrow syntax.
+let f = { x => y => z => math.sqrt(x ** 2 + y ** 2 + z ** 2) }
+
+let r = ((f(1))(2))(3)
+
+print("r = $r")
+
+-- Builder pattern
+def builder() {
+  class Step {
+    def food(kind) = using(self) {
+      self.kind = kind
+    }
+    def build() = "r{ kind = ${self.kind} }"
+  }
+  return new Step()
+}
+
+let built = builder():food("cat"):build()
+
+print(built)
+
+[1, 2, 3, 4] |> map{ x => x + 1 } |> join(", ") |> print

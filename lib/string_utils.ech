@@ -1,0 +1,22 @@
+--[[
+  Extended standard library module
+  String utilities
+]]
+let { split, trim } = require("lib/std")
+
+--[[
+  Extension function.
+]]
+def extend[string] split(by) {
+  if (by == nil) {
+    by = ","
+  }
+  return self |> split(by)
+}
+
+--[[
+  Trims the string.
+]]
+def extend[string] trim() {
+  return self |> trim
+}

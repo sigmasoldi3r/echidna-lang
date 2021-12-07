@@ -5,6 +5,65 @@
   function L(tag, o = {}) {
     return {tag, ...o, location: location()}
   }
+  const UNARY_OPERATORS = {
+    '~': '__add',
+    'not': '__add',
+    'new': '__add',
+    '!': '__add',
+    '-': '__unm',
+    '%': '__mod',
+    '+': '__unp',
+    '¬': '__unhook',
+    '$': '__undollar',
+    '#': '__len',
+  }
+  const BINARY_OPERATORS = {
+    // Canon operators
+    '+': '__add',
+    '-': '__sub',
+    '%': '__mod',
+    '*': '__mul',
+    '/': '__div',
+    '..': '__concat',
+    '==': '__eq',
+    '<=': '__le',
+    '<': '__lt',
+    // Extended operator set
+    '+++': '__tripleadd',
+    '++': '__doubleadd',
+    '***': '__triplemul',
+    '**': '__pow',
+    '///': '__tripleslash',
+    '>>>': '__triplershift',
+    '>>': '__rshift',
+    '<<<': '__triplelshift',
+    '<<': '__lshift',
+    '<|>': '__disjoin',
+    '<=>': '__spaceship',
+    '=>>': '__farrow',
+    '<<=': '__barrow',
+    '>=>': '__fdarrow',
+    '<=<': '__bdarrow',
+    '===': '__tripleeq',
+    '!==': '__tripleneq',
+    '~==': '__doublecandle',
+    '~=': '__candle',
+    '~~=': '__litcandle',
+    '~~==': '__litdoublecandle',
+    'is': '__is',
+    '->': '__toleft',
+    '~>': '__wavyleft',
+    '-->': '__longleft',
+    '~~>': '__wavylongleft',
+    '<~~': '__wavylongright',
+    '<~': '__wavyright',
+    '<--': '__longright',
+    '<-': '__toright',
+    '.-': '__pin',
+    '~-': '__righthook',
+    '-~': '__lefthook',
+    '::': '__append',
+  }
 }
 
 script =
@@ -54,16 +113,34 @@ classStatement
   = def:classExpression
   { return L('classStatement', {def}) }
 
+operatorDef
+  = OPERATOR _ op:(
+    ADDITIVE_OPERATOR
+    / PRODUCT_OPERATOR
+    / COMPARISON_OPERATOR
+    / LOGIC_OPERATOR
+    / SPECIAL_OPERATOR
+  ) { return L('operator', {op}) }
+
 functionStatement
   = DEF
   pure:(__ @PURE)?
   stat:(__ @STATIC)?
   extension:(__ EXTEND '[' _ @expression _ ']')?
-  operator:(__ @OPERATOR)?
-  __ name:name
+  __ nameDef:(@operatorDef / @name)
   _ args:('(' @argumentList ')')+
   _ body:(('{' @script '}') / ('=' _ @expression))
-  { return L('def', {pure, stat, extension, operator, name, args, body}) }
+  {
+    let name = nameDef
+    if (nameDef.tag === 'operator') {
+      const value = BINARY_OPERATORS[nameDef.op]
+      if (value == null) {
+        throw new Error(`Not a valid operator: ${nameDef.op ?? '<ERROR>'}`)
+      }
+      name = { ...nameDef, tag: 'name', value }
+    }
+    return L('def', {pure, stat, extension, name, args, body})
+  }
 
 codeBlock
   = '{' @script '}'
@@ -405,18 +482,28 @@ COMPARISON_OPERATOR
   / '<='
   / '>'
   / '<'
+  / 'is'
 LOGIC_OPERATOR
   = 'and'
   / 'or'
 SPECIAL_OPERATOR
   = '->'
+  / '~>'
+  / '-->'
+  / '~~>'
+  / '<~~'
+  / '<~'
+  / '<--'
   / '<-'
+  / '.-'
+  / '~-'
+  / '-~'
   / '..'
   / '::'
-  / '<|'
   / '??'
 PIPELINE_OPERATORS
   = '|>'
+  / '<|'
 ASSIGN_OPERATOR
   = '+'
   / '..'

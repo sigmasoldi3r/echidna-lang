@@ -1,0 +1,51 @@
+--[[
+  Standard echidna library
+]]
+
+--[[
+  Temporary bind, useful in builder patterns.
+  @param what The object or value to be returned
+  @param target A function that will be executed
+]]
+export def using(what, target) {
+  target(what)
+  return what
+}
+
+--[[
+  Creates a mapper function ready to be piped with the smart pipeline operator.
+  For example [1, 2] |> map{ it * 2 }
+  Maps and objects are also iterable.
+  @param mapper A mapper function.
+  @returns {(iterable) => iterable}
+]]
+export def map(mapper)(iterable) {
+  let output = []
+  for (k, v <- iterable |> pairs) {
+    output[k] = mapper(v, k)
+  }
+  return output
+}
+
+--[[
+  Creates a joiner function ready to be piped with the smart pipeline operator.
+  For example [1, 2] |> join(", ")
+  @param joining
+  @returns {(iterable) => string}
+]]
+export def join(joining)(iterable) {
+  return table.concat(iterable, joining)
+}
+
+--[[
+  Trims the input string.
+]]
+export def trim(str) {
+  return str:gsub("^%s*(%S+)%s*$", "%1")
+}
+
+export class Map {}
+
+export class Set {}
+
+export class List {}

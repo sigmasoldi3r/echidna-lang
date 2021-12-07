@@ -81,13 +81,16 @@ parameters are specified (Eg: `{}`). If what you want is a true 0-arity
 function, you must write `{=>}`, otherwise you'll have an equivalent to
 `(it) => {}` in javascript.
 
-The latter brings us a speciall syntax for calls, where lambdas can be passed
-as the last item in the call.
+This enables the programmer to use implicit parameter constructs, for builder
+types, like `some { it:doMore("things") }`.
 
-Like `my("target", func) { a => a + 1 } `
+The block-like lambdas brings us a speciall syntax for calls, where they can
+be passed as the last item in the call.
+
+Like `my("target", func) { a => a + 1 } `, this syntax is inspired by _Kotlin_.
 
 This enables the language to support constructs like the ones that `Sphinx`
-uses.
+HTML document builder uses.
 
 _`Sphinx` is a library for HTML rendering that is being built in Echidna_
 
@@ -136,3 +139,17 @@ def extend[string] hello() = "Hello $self!"
 let str = "World"
 let helloWorld = str:hello()
 ```
+
+Echidna will come with an optional standard library, which may, or may not be
+included with your programs, depending on the needs and requirements of your
+environment.
+
+This makes echidna free of any mandatory runtime, enabling your scripts to be
+light as pure Lua scripts.
+
+## Future plans
+
+Aside from making a fresh 1.0 release with full functionality, Echidna compiler
+is planned to have an abstracted code emitter, so we will be able to plug-in
+other backends in the future (Enabling us to create Javascript targets, for
+example).

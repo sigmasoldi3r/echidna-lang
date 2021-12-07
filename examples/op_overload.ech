@@ -1,0 +1,26 @@
+--[[
+  Operator overload example
+]]
+
+class Vector(let x = 0, let y = x, let z = y) {
+  def operator +(other) =
+    new self(self.x + other.x, self.y + other.y, self.z + other.z)
+  
+  def operator ***(a) {
+    print("Triplestar{$self|$a}")
+    return 0
+  }
+  def __tostring() {
+    let { x, y, z } = self
+    return "($x, $y, $z)"
+  }
+}
+
+let a = new Vector(1, 2, 3)
+let b = new Vector(3, 2, 1)
+let c = a + b
+print("a = $a
+b = $b
+c = $c")
+
+let z = a *** b

@@ -1,0 +1,10 @@
+require("lib/string_utils")
+let { map } = require("lib/std")
+
+let str = "my, hafling stringo, buzzlightear, no?"
+
+let lst = str:split(",") |> map{ it:trim() }
+
+for (_, v <- lst |> pairs) {
+  print("-> \"$v\"")
+}

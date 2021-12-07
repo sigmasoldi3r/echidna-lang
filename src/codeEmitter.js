@@ -1,6 +1,43 @@
 const Printer = require("./Printer");
 const { CodeSyntaxError, CodeError, CompilerError } = require("./exceptions");
 
+const BINARY_OPERATORS = {
+  "+++": "__tripleadd",
+  "++": "__doubleadd",
+  "***": "__triplemul",
+  "**": "__pow",
+  "///": "__tripleslash",
+  ">>>": "__triplershift",
+  ">>": "__rshift",
+  "<<<": "__triplelshift",
+  "<<": "__lshift",
+  "<|>": "__disjoin",
+  "<=>": "__spaceship",
+  "=>>": "__farrow",
+  "<<=": "__barrow",
+  ">=>": "__fdarrow",
+  "<=<": "__bdarrow",
+  "===": "__tripleeq",
+  "!==": "__tripleneq",
+  "~==": "__doublecandle",
+  "~=": "__candle",
+  "~~=": "__litcandle",
+  "~~==": "__litdoublecandle",
+  is: "__is",
+  "->": "__toleft",
+  "~>": "__wavyleft",
+  "-->": "__longleft",
+  "~~>": "__wavylongleft",
+  "<~~": "__wavylongright",
+  "<~": "__wavyright",
+  "<--": "__longright",
+  "<-": "__toright",
+  ".-": "__pin",
+  "~-": "__righthook",
+  "-~": "__lefthook",
+  "::": "__append",
+};
+
 const EXPORT_VAR = `__exported__`;
 
 const ContextType = {
@@ -287,8 +324,16 @@ class Context {
         this.compile(right, true);
         this.write(`)`);
         break;
-      default:
-        throw new CodeError(`Operator ${op} not supported yet`, node);
+      default: {
+        const val = BINARY_OPERATORS[op];
+        if (val == null) {
+          throw new CodeError(`Operator ${op} not supported yet`, node);
+        }
+        this.compile(left, true);
+        this.write(`:${val}(`);
+        this.compile(right, true);
+        this.write(`)`);
+      }
     }
   };
   #extractPipe(node) {
