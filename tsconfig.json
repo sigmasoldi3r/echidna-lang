@@ -11,7 +11,10 @@
     "emitDecoratorMetadata": true,
     "allowJs": true,
     "resolveJsonModule": true,
-    "experimentalDecorators": true
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "experimentalDecorators": true,
+    "target": "ES6"
   },
   "include": [
     "src/**/*.ts"
