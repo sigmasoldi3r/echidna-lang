@@ -1,3 +1,4 @@
+const chalk = require("chalk");
 const { Context } = require("./codeEmitter");
 const { CodeSyntaxError: SyntaxError } = require("./exceptions");
 const grammar = require("./grammar");
@@ -11,6 +12,7 @@ module.exports = class Compiler {
     try {
       ast = grammar.parse(src, { grammarSource });
     } catch (err) {
+      console.debug`{yellow ${err}}`;
       throw new SyntaxError("Unexpected token", err);
     }
     this.root.writeln(`-- EXPORTED\nlocal ${this.root.exportVar} = {};\n`);

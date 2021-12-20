@@ -7,6 +7,8 @@
 let b = nil
 let a = 1
 
+print("a ?? b = ${a ?? b}")
+
 -- Typical unguarded code
 try {
   let result = a + b

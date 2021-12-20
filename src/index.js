@@ -8,6 +8,7 @@ const path = require("path");
 const mkdirp = require("mkdirp");
 const cliProgress = require("cli-progress");
 const { CompilerError } = require("./exceptions");
+const Config = require("./services/Config");
 
 const CWD = process.cwd();
 
@@ -35,9 +36,11 @@ program
   )
   .option("-c, --config <file>", "Use configuration file")
   .option("-o, --out <file>", "Specify the output file")
+  .option("-d, --debug", "Enables internal debug output")
   .parse();
 
 const options = program.opts();
+Config.instance.debug = options.debug;
 
 /**
  * @param {string} file

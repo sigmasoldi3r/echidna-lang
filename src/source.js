@@ -1,6 +1,7 @@
 const fs = require("fs");
 const chalk = require("chalk");
 const { CodeError } = require("./exceptions");
+const logger = require("./services/Logger").instance;
 
 /** @param {string} src */
 const source = (source) => {
@@ -14,22 +15,19 @@ const source = (source) => {
           const { start, end } = err.location;
           const line = src.split("\n")[start.line - 1];
           const lineText = start.line + " ";
-          console.error(
-            `
+          logger.log`
 ${chalk.blue(source)}:${chalk.yellow(start.line)}:${chalk.yellow(
-              start.column
-            )} - ${chalk.red(err.name ?? "error")}: ${err.message}
+            start.column
+          )} - ${chalk.red(err.name ?? "error")}: ${err.message}
 
 ${chalk.black.bgWhite(lineText)} ${line}
 ${chalk.bgWhite(" ".repeat(lineText.length))} ${" ".repeat(
-              Math.max(start.column - 1, 0)
-            )}${chalk.red("^".repeat(Math.max(end.column - start.column, 0)))}`
-          );
-          // if ()
-          console.error(chalk`\n{red Trace:\n ${err.stack}}`);
+            Math.max(start.column - 1, 0)
+          )}${chalk.red("^".repeat(Math.max(end.column - start.column, 0)))}`;
+          logger.debug`{red Trace:\n ${err.stack}}`;
           throw err;
         } else {
-          console.error(chalk`{red Unable to map the error}`);
+          logger.error`Unable to map the error\n${err.stack}`;
           throw err;
         }
       }

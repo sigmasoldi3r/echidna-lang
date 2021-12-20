@@ -214,8 +214,8 @@ logicExpression
   / specialExpression
 
 specialExpression
-  = left:unaryExpression _ elvis:elvis? op:SPECIAL_OPERATOR _ right:specialExpression
-  { return L('binary', {left, op, elvis, right}) }
+  = left:unaryExpression _ op:SPECIAL_OPERATOR _ right:specialExpression
+  { return L('binary', {left, op, right}) }
   / unaryExpression
 
 unaryExpression

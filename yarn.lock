@@ -98,6 +98,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.11.9.tgz#879be3ad7af29f4c1a5c433421bf99fab7047185"
   integrity sha512-MKmdASMf3LtPzwLyRrFjtFFZ48cMf8jmX5VRYrDQiJa8Ybu5VAmkqBWqKU8fdCwD8ysw4mQ9nrEHvzg6gunR7A==
 
+"@types/node@^17.0.1":
+  version "17.0.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.1.tgz#88d501e84b6185f6489ecee4ba9e8fcec7f29bb2"
+  integrity sha512-NXKvBVUzIbs6ylBwmOwHFkZS2EXCcjnqr8ZCRNaXBkHAf+3mn/rPcJxwrzuc6movh8fxQAsUUfYklJ/EG+hZqQ==
+
 "@types/responselike@*", "@types/responselike@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/responselike/-/responselike-1.0.0.tgz#251f4fe7d154d2bad125abe1b429b23afd262e29"
@@ -1651,6 +1656,11 @@ readable-stream@^3.1.1, readable-stream@^3.4.0, readable-stream@^3.6.0:
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
 
+reflect-metadata@^0.1.13:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
+  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
+
 require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
@@ -2014,6 +2024,16 @@ type-check@~0.3.2:
   integrity sha1-WITKtRLPHTVeP7eE8wgEsrUg23I=
   dependencies:
     prelude-ls "~1.1.2"
+
+typedi@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/typedi/-/typedi-0.10.0.tgz#e8f9a5ee100b84addbdfb57fe90d8d9ed2a21dea"
+  integrity sha512-v3UJF8xm68BBj6AF4oQML3ikrfK2c9EmZUyLOfShpJuItAqVBHWP/KtpGinkSsIiP6EZyyb6Z3NXyW9dgS9X1w==
+
+typescript@^4.5.4:
+  version "4.5.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.4.tgz#a17d3a0263bf5c8723b9c52f43c5084edf13c2e8"
+  integrity sha512-VgYs2A2QIRuGphtzFV7aQJduJ2gyfTljngLzjpfW9FoYZF6xuw1W0vW9ghCKLfcWrCFxK81CSGRAvS1pn4fIUg==
 
 unbzip2-stream@^1.0.9:
   version "1.4.3"

@@ -324,6 +324,12 @@ class Context {
         this.compile(right, true);
         this.write(`)`);
         break;
+      case "??":
+        this.compile(left, true);
+        this.write(` ~= nil and `);
+        this.compile(left, true);
+        this.write(` or `);
+        this.compile(right, true);
       default: {
         const val = BINARY_OPERATORS[op];
         if (val == null) {

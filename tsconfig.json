@@ -1,0 +1,22 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "noStrictGenericChecks": false,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitAny": true,
+    "strict": true,
+    "emitDecoratorMetadata": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
