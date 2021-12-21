@@ -4,7 +4,7 @@ import { Compiler } from '../architecture/Compiler'
 
 @Service()
 export class CompilerProvider {
-  byEmitter<T extends CodeEmitter>(instance: T): Compiler<T> {
-    return new Compiler<T>(instance)
+  byEmitter<T extends CodeEmitter>(emitter: T): Compiler<T> {
+    return new Compiler<T>(emitter)
   }
 }

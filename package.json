@@ -23,7 +23,8 @@
     "compress": "GZip"
   },
   "scripts": {
-    "start": "node src/index.js",
+    "start2": "node src/index.js",
+    "start": "ts-node src/main.ts",
     "build": "peggy --cache -o src/grammar.js echidna.peggy",
     "peg": "peggy",
     "bundle": "rollup src/index.js --file dist/bundle.js --format umd --name \"echidna\"",
@@ -34,6 +35,7 @@
     "peggy": "^1.2.0",
     "pkg": "^5.4.1",
     "rcedit": "^3.0.1",
+    "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
   }
 }
