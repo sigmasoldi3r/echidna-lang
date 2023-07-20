@@ -1,4 +1,9 @@
-# ![Echidna Logo](echidna.png) Echidna Lang
+# ![Echidna Logo](echidna.png) Echidna Lang (See Note)
+
+### NOTE
+**Echidna has been superseded by [Saturnus, the enhanced child of echidna](https://github.com/sigmasoldi3r/saturnus)**
+
+---
 
 A flexible programming language for the 21st century, targetting the Lua virtual
 machine.
